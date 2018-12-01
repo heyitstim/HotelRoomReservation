@@ -1,0 +1,158 @@
+display text
+
+	echo "your text here";
+	echo "$var1 your text here";
+	echo 'your text here';
+	echo "your"."text"."here";
+	echo "your {$var1} here";
+string functions
+	strtolower($var1); //your text here//
+	strtoupper($var1); //YOUR TEXT HERE//
+	ucfirst($var1);	   //Your text here//
+	ucwordd($var1);	   //Your Text Here//
+	
+	strlen($var1);   					//14//
+	trim(" text ");	 					//your text here//yourtexthere//
+	strstr($var1, "to search");				//your text here//text here//
+	str_replace("find what","replace it with",$var1);	//your replace it with here//
+
+	str_repeat($var1,2);					//your text here.your text here//
+	substr($var1,3,5);					//r tex//
+	strpos($var1,"text");					//6//
+	starchr($var1,"t");					//text here//
+integer functions
+	abs(0-300);	//300//
+	pow(2,3);	//8//
+	sqrt(9);	//3//
+	fmod(5,2);	//1//
+	rand();		//123123123131//
+	rand(1,10);	//5//
+functions
+	function functionName(){
+		echo "your text here.";
+	}
+	functionName();
+	function functionName($var1){
+		echo "your {$var1} here.";
+	}
+	functionName();
+
+passing value to another page
+	<?php
+		$id = 2;
+	?>
+	<a href ="philrey.php?id=<?php echo $id; ?> "> My Link Name </a>
+	-write the link name. // philrey.php
+	-put "?" after the link name. // philrey.php?
+	-type the variable name you want to pass, and add an "="// philrey.php?id=
+	-echo the value of your php variable. // philrey.php?id=<?php echo $id; ?>
+
+passing multiple values to another page
+	-after putting you first variable name, add an "&". philrey.php?id=2&name=philrey
+
+recieving values from the url
+	-assign the value based on the id using the $_GET["var_name"];
+	$id = $_GET["id"];
+	$uname = $_GET["name"];
+
+encoding strings with reservered words such as "!# % & ' ( ) * + , / : ; = ? @ [ ]"
+	urlencode($var_name);
+	-when echo-ing your string, put it on a urlencode($var_name) function.  // echo urlencode($name);
+	(note: once passed, it will be auto-decoded. SO NO NEED to decode it yourself.)
+default encoding methods in putting URLS.
+	rawurlencode($var_name) ? urlencode($var_name)
+encoding characters in html such as < > $ " via php.
+	echo htmlspecialchars($var_name);
+encoding other special characters in html such as "
+	echo htmlentities($var_name);
+
+including other php file to a single file for reuseability
+	include() = includes a file to be added, but still runs if file is not found.
+	<?php include("philrey2.php")?>
+	require() = includes a file to be added, but page won't work if a single file is missing.
+	include_once() = includes a file only once, ignores if the same file is called;
+	required_once() = ""     ""        ""	""  	""
+redirecting to a page using headers
+	-On the top of your file (no white spaces), put the redirect page there...
+	<?php
+		header("Location: philrey.php");
+		exit:
+	?>
+Building Forms
+    <form action="log_in.php" method="post" target="blank">
+        User Nime: 
+		<input type="text" name="userN" value="asd"/><br>
+        Passwerd: 
+		<input type="password" name="passW" value="asd"><br>
+        Number: 
+		<input type="number" name="numbeR" value ="asd"><br>
+        Date: 
+		<input type="datetime" name="datE" ><br>
+        <input type="submit" name="submit" value="Submit">
+    </form>
+recieving values from forms
+	-use $_POST ["input_name"];
+	$username = $_POST[userN];
+
+checking if the submitted forms are empty
+	(Note: put this to an "if" condition)
+	if(isset($_POST["name"])){
+		//Do code here//
+	}else{
+		//Do error code here.
+	}
+setting cookies
+				//sec//min//hour//days//
+	$expirationDate = time() + (60*60*24*7);
+	setcookie($name,$value,$expirationDate);
+
+Steps to Remember in Accessing a database in PHP
+	1. OPEN a CONNECTION
+	2. PERFORM a database QUERY
+	3. USE or PROCESS returned data
+	4. RELEASE data to the webpage
+	5. CLOSE database CONNECTION
+	
+	1. Opening a Connection
+		//Opening a connection to my Database//
+		$host_name="localhost";
+	    	$user_name="cinema_admin";
+		$password="cinema_admin";
+	    	$db_name="cinema_db";
+	    	$connection = mysqli_connect($host_name,$user_name,$password,$db_name);
+	    	//Checks if the connection was unsuccessfull//
+	    	if(mysql_errno()){
+	        	die("Connection failed with an error: " . mysqli_connect_error() . "(" . mysqli_connect_errno() . ")");
+	    	}else{
+	        	echo "Connected Successfully.";
+	    	}
+	2. PERFORM a database QUERY
+		//2. Performing a query//
+                $query =  "SELECT * FROM purchases";
+                $result = mysqli_query($connection,$query);
+                //Checks if there was no result
+                if(!$result){
+                    die("Query Failed");
+                }
+	3. USE or PROCESS returned data
+		$cLine = array();
+                //3. Use Returned Rows //
+                while($row = mysqli_fetch_assoc($result)){
+                    // Output each row//
+                                      
+                    $cLine[] = array($row['id'],$row['user_id'],$row['movie_name'],$row['seat_number'],$row['booked_date']);
+                }
+		//displaying an output
+		for($n=0;$n<sizeof($cLine);$n++){
+                    for($x=0;$x<sizeof($cLine[$n]);$x++){
+                        echo $cLine[$n][$x] . " ";
+                    }
+                }
+	4. RELEASE data to the webpage to free memory
+		//4. Release Data//
+                mysqli_free_result($result);
+	5. CLOSE database CONNECTION
+		mysqli_close($connection);
+
+
+
